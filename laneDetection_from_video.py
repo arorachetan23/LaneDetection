@@ -63,16 +63,27 @@ def display_lines(image,lines):
 
 #capuring video
 cap=cv2.VideoCapture("video.mp4")
+#fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+
+#out = cv2.VideoWriter('output.mp4',  0x00000021, 20.0, (640,480))
+#out = cv2.VideoWriter('output.avi',   0x00000020, 20.0, (704,1279))
+
+frame_width = int(cap.get(3))
+frame_height = int(cap.get(4))
+ 
+# Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
+out = cv2.VideoWriter('outpt.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (frame_width,frame_height))
+
 while(cap.isOpened()):
 	_,image=cap.read()
 
 	img=pre_process(image)
 	lines=detecting_lines(img)
-
+	
 	avg_lines=average_out(img,lines)
 
 	added_img=display_lines(image,avg_lines) 
-
+	out.write(added_img)
 
 	#cv2.imshow("org",image)
 #cv2.imshow("gray",imgray)
@@ -85,4 +96,5 @@ while(cap.isOpened()):
 		break
 
 cap.release()
+out.release()
 cv2.destroyAllWindows()		
